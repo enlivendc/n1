@@ -6,11 +6,11 @@ import Layout from '../components/layout'
 import { getAllPagesWithSlugs, getPageBySlug,getPrimaryMenu } from '../lib/api'
 import Head from 'next/head'
 import { CMS_NAME } from '../lib/constants'
- console.log(Header);
+ 
 
 export default function Page({ page,menuItems}) {
     
-    console.log("menuItems",menuItems);
+   
     const router = useRouter()
     return (
         <Layout >
@@ -21,7 +21,7 @@ export default function Page({ page,menuItems}) {
           <Container>
         
             {router.isFallback ? (
-              <PostTitle>Loading…</PostTitle>
+                <article>Loading…</article>
             ) : (
               <>
                 <article>
