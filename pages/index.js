@@ -1,50 +1,24 @@
-import Head from 'next/head'
-import Header from '../components/Header';
-import Container from '../components/container'
-import MoreStories from '../components/more-stories'
-import HeroPost from '../components/hero-post'
-import Intro from '../components/intro'
+
+import HomeSlider from '../components/HomeSlider';
+import HomeContent from '../components/HomeContent'; 
 import Layout from '../components/layout'
-import { getAllPostsForHome,getPrimaryMenu  } from '../lib/api'
-
-import { CMS_NAME } from '../lib/constants'
-
-
-
-export default function Index({ allPosts: { edges }, preview,menuItems }) {
-  const heroPost = edges[0]?.node
-  const morePosts = edges.slice(1)
-
+import { getPrimaryMenu,getHomeBySlug  } from '../lib/api'
+ 
+export default function Index({preview,menuItems,getPageContent }) { 
+ 
   return (
-    <Layout preview={preview}>
-      <Head>
-        <title>{CMS_NAME}</title> 
-      </Head>
-      <Header menuItems={menuItems} />
-      <Container>
-        <Intro />
-        {heroPost && (
-          <HeroPost
-            title={heroPost.title}
-            coverImage={heroPost.featuredImage?.node?.sourceUrl}
-            date={heroPost.date}
-            author={heroPost.author}
-            slug={heroPost.slug}
-            excerpt={heroPost.excerpt}
-          />
-        )}
-        {morePosts.length > 0 && <MoreStories posts={morePosts} />}
-      </Container>
+    <Layout preview={preview}  menuItems={menuItems}>  
+      <HomeSlider homePageSlider={getPageContent?.homePageSlider}  />
+      <HomeContent homepageService={getPageContent?.homepageService} homePageContent={getPageContent?.homePageContent} />  
     </Layout>
   )
 }
 
 export async function getStaticProps({ preview = false }) {
-  const allPosts = await getAllPostsForHome(preview)
-  const menuItems = await getPrimaryMenu();
-
-
+  
+  const menuItems = await getPrimaryMenu(); 
+  const getPageContent = await getHomeBySlug('home');  
   return {
-    props: { allPosts, preview,menuItems },
+    props: {preview,menuItems,getPageContent },
   }
 }
